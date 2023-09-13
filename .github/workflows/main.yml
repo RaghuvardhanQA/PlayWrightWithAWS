@@ -10,8 +10,8 @@ jobs:
       - name: Execute script on EC2
         env:
           PRIVATE_KEY: '${{ secrets.EC2_SSH_PRIVATE_KEY }}'
-          HOST: 18.223.21.115
-          USER: ec2-user
+          HOST: 3.16.1.40
+          USER: ubuntu
         run: |
           echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
           ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} 'npm
