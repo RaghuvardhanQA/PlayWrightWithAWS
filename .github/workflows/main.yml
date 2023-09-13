@@ -3,17 +3,17 @@ name: Run Tests on PlayWrightEC2
 on:
   push:
     branches:
-      - main # or the default branch name of your repository
+      - main
   pull_request:
     branches:
-      - main # or the default branch name of your repository
+      - main
 
 jobs:
   test:
-    runs-on: self-hosted
+    runs-on: [self-hosted, PlayWrightEC2]
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [20.x]
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -23,8 +23,12 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
+    - name: Install Playwright dependencies
+      run: sudo npx playwright install-deps
+
     - name: Install dependencies
       run: npm ci
 
     - name: Run tests
       run: npm run test
+
