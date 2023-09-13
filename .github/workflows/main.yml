@@ -1,18 +1,30 @@
-name: Execute Script on EC2
-'on':
-  - push
+name: Run Tests on PlayWrightEC2
+
+on:
+  push:
+    branches:
+      - main # or the default branch name of your repository
+  pull_request:
+    branches:
+      - main # or the default branch name of your repository
+
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+  test:
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        node-version: [18.x]
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Execute script on EC2
-        env:
-          PRIVATE_KEY: '${{ secrets.EC2_SSH_PRIVATE_KEY }}'
-          HOST: 3.16.1.40
-          USER: ubuntu
-        run: |
-          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} 'npm
-          run test'
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run tests
+      run: npm run test
