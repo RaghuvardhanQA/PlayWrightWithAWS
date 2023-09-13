@@ -1,0 +1,22 @@
+name: Execute Script on EC2
+
+on: [push]  # or another trigger you prefer
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Execute script on EC2
+      env:
+        PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+        HOST: your-ec2-ip-address
+        USER: ec2-user  # or the user you want to SSH as
+      run: |
+        echo "$PRIVATE_KEY" > private_key.pem
+        chmod 600 private_key.pem
+        ssh -o StrictHostKeyChecking=no -i private_key.pem $USER@$HOST './your-script-on-ec2.sh'
+        rm -f private_key.pem
