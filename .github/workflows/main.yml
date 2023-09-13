@@ -13,7 +13,7 @@ jobs:
     - name: Execute script on EC2
       env:
         PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-        HOST: 18.118.198.192
+        HOST: 18.223.21.115
         USER: ec2-user
       run: |
         echo "$PRIVATE_KEY" > private_key.pem
