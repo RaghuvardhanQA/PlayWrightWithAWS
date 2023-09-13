@@ -61,7 +61,7 @@ export default defineConfig({
     timeout: EXPECT_TIMEOUT,
   },
   use: {
-    headless: false,
+    headless: true,
     /* Sets extra headers for CloudFlare. */
     extraHTTPHeaders: {
       'CF-Access-Client-Id': process.env.CF_CLIENT_ID || '',
