@@ -1,22 +1,21 @@
 name: Execute Script on EC2
-
-on: [push]  # or another trigger you prefer
-
+'on':
+  - push
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Execute script on EC2
+        env:
+          PRIVATE_KEY: '${{ secrets.EC2_SSH_PRIVATE_KEY }}'
+          HOST: 18.223.21.115
+          USER: ec2-user
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+            ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
 
-    - name: Execute script on EC2
-      env:
-        PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-        HOST: 18.223.21.115
-        USER: ec2-user
-      run: |
-        echo "$PRIVATE_KEY" > private_key.pem
-        chmod 600 private_key.pem
-        ssh -o StrictHostKeyChecking=no -i private_key.pem $USER@$HOST './your-script-on-ec2.sh'
-        npm run test
+                # Now we have got the access of EC2 and we will start the deploy .
+                npm run test
+                '
