@@ -13,8 +13,8 @@ jobs:
     - name: Execute script on EC2
       env:
         PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-        HOST: your-ec2-ip-address
-        USER: ec2-user  # or the user you want to SSH as
+        HOST: 18.118.198.192
+        USER: ec2-user
       run: |
         echo "$PRIVATE_KEY" > private_key.pem
         chmod 600 private_key.pem
